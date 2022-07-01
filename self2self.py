@@ -11,7 +11,7 @@ from matplotlib import cm
 from matplotlib import pyplot as plt
 import cv2
 import util
-from util import timeSince
+# from util import timeSince
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -54,9 +54,9 @@ def image_loader(image, device, p1, p2, degree):
     """load image, returns cuda tensor"""
     loader = T.Compose([T.RandomHorizontalFlip(torch.round(torch.tensor(p1))),
                         T.RandomVerticalFlip(torch.round(torch.tensor(p2))),T.ToTensor(),
-                        T.RandomRotation(degree)])
+                  ])
     
-    image = Image.fromarray(image.astype(np.uint8))
+    image = Image.fromarray(image.astype(np.float32))
     image = loader(image).float()
     image = torch.tensor(image)
     image = image.unsqueeze(0)  #this is for VGG, may not be needed for ResNet
@@ -66,7 +66,9 @@ def image_loader(image, device, p1, p2, degree):
 def train_self2self(imgdir, img_channel, p, sigma=-1, is_realnoisy = False):
 	model = self2self(img_channel, p)
 	model = model.cuda()
-	img = np.array(Image.open(imgdir))
+    
+	img = np.array(Image.open(imgdir)) / 255.0
+    
 	optimizer = optim.Adam(model.parameters(), lr = cfg.learning_rate)
 	print("img.shape:", img.shape)
 	w,h,c = img.shape
@@ -147,6 +149,7 @@ def train_self2self(imgdir, img_channel, p, sigma=-1, is_realnoisy = False):
 if __name__ == "__main__":
     
 	img = "./testsets/PolyU/45.JPG" # (321, 481)
+    
 	# img = './testsets/BSD68/11.png'
 	# img = './testsets/Set9/5.png'  # (512, 512, 3)
 	sigma = -1

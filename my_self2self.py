@@ -11,7 +11,7 @@ from matplotlib import cm
 from matplotlib import pyplot as plt
 import cv2
 import util
-from util import timeSince
+# from util import timeSince
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -33,7 +33,7 @@ from partialconv2d import PartialConv2d
 from model import self2self
 from config import CFG
 
-os.environ["CUDA_VISIBLE_DEVICES"]="4"
+# os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 cfg = CFG()
 if not os.path.exists(cfg.expdir):
