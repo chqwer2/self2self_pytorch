@@ -2,7 +2,8 @@ import numpy as np
 import cv2
 import scipy.io as sio
 import random
-
+import time
+import math
 
 def add_gaussian_noise(img, model_path, sigma):
     index = model_path.rfind("/")
@@ -40,3 +41,17 @@ def mask_pixel(img, model_path, rate):
     cv2.imwrite(model_path[0:index] + '/masked_img.png', np.squeeze(np.uint8(np.clip(masked_img, 0, 1) * 255.)))
     cv2.imwrite(model_path[0:index] + '/mask.png', np.squeeze(np.uint8(np.clip(mask, 0, 1) * 255.)))
     return masked_img, mask
+
+
+def asMinutes(s):
+    m = math.floor(s / 60)
+    s -= m * 60
+    return '%dm %ds' % (m, s)
+
+
+def timeSince(since, percent):
+    now = time.time()
+    s = now - since
+    es = s / (percent)
+    rs = es - s
+    return '%s (remain %s)' % (asMinutes(s), asMinutes(rs))
