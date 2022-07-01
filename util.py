@@ -14,7 +14,7 @@ def add_gaussian_noise(img, model_path, sigma):
     else:
         noisy_img = img.astype(np.float32)
     cv2.imwrite(model_path[0:index] + '/noisy.png',
-                np.squeeze(np.int32(np.clip(noisy_img, 0, 1) * 255.)))
+                np.squeeze(np.int32(np.clip(noisy_img, 0, 1))))
     return noisy_img
 
 

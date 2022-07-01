@@ -11,7 +11,7 @@ from matplotlib import cm
 from matplotlib import pyplot as plt
 import cv2
 import util
-# from util import timeSince
+from util import timeSince
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -68,6 +68,7 @@ def train_self2self(imgdir, img_channel, p, sigma=-1, is_realnoisy = False):
 	model = model.cuda()
  
 	img = np.array(Image.open(imgdir))
+    
 	# =========== Prepare
 	cfg.imgdir = os.path.join(cfg.imgdir, imgdir.split('/')[-1])
 	cfg.mdldir = os.path.join(cfg.mdldir, imgdir.split('/')[-1] + '-DA')
@@ -141,11 +142,10 @@ def train_self2self(imgdir, img_channel, p, sigma=-1, is_realnoisy = False):
 		
 		# print(torch.max(output), torch.max(y))
 		end = time.time()
-		print("Elapsed %s  iteration %d, loss = %.4f" % (
-      			timeSince(start, float(itr+1)/cfg.iteration), itr+1, loss.item()*100))
-  
+
 		#break
 		if (itr+1)%1000 == 0:
+			print("Elapsed %s  iteration %d, loss = %.4f" % (timeSince(start, float(itr+1)/cfg.iteration), itr+1, loss.item()*100))
 			model.eval()
 			sum_preds = np.zeros((img.shape[0],img.shape[1],img.shape[2]))
 			for j in range(cfg.NPred):
@@ -164,8 +164,8 @@ def train_self2self(imgdir, img_channel, p, sigma=-1, is_realnoisy = False):
 			#avg_preds = np.squeeze(np.uint8(np.clip((avg_preds-np.min(avg_preds)) / (np.max(avg_preds)-np.min(avg_preds)), 0, 1) * 255))
 			
 			write_img = Image.fromarray(avg_preds)
-			write_img.save(os.path.join(cfg.imgdir, "Self2self-"+str(itr+1)+".png"))
-			torch.save(model.state_dict(), os.path.join(cfg.mdldir, 'model-'+str(itr+1)))
+			write_img.save(os.path.join(cfg.imgdir, "My-"+str(itr+1)+".png"))
+			# torch.save(model.state_dict(), os.path.join(cfg.mdldir, 'model-'+str(itr+1)))
  
 
 
